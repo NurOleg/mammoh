@@ -6,13 +6,21 @@ namespace Database\Seeders;
 
 use App\Models\Reducer;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class AddGearRatioPropertiesToReducersSeeder extends Seeder
 {
     public function run(): void
     {
+        $filePath = Storage::putFileAs(
+            'reducers',
+            'https://phenomenal-cocada-29cd77.netlify.app/resources/images/product-page-slider-main-img.png',
+            'ZDY-80.png'
+        );
+
         $reducer = new Reducer();
         $reducer->title = 'ZDY-80';
+        $reducer->serie_id = 1;
         $reducer->subtitle = 'редуктор цилиндрический одноступенчатый';
         $reducer->transmission_type = 'Цилиндрический';
         $reducer->number_of_transmission_stages = 'Одноступенчатый';
@@ -62,12 +70,19 @@ class AddGearRatioPropertiesToReducersSeeder extends Seeder
         $reducer->total_center_distance = 80;
         $reducer->rated_output_torque = 470;
         $reducer->efficiency = 0.97;
+        $reducer->preview_image_url = $filePath;
         $reducer->save();
 
         $reducer->gear_ratios()->sync([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]);
 
+        $filePath = Storage::putFileAs(
+            'reducers',
+            'https://phenomenal-cocada-29cd77.netlify.app/resources/images/product-page-slider-main-img.png',
+            'ZDY-100.png'
+        );
         $reducer = new Reducer();
         $reducer->title = 'ZDY-100';
+        $reducer->serie_id = 1;
         $reducer->subtitle = 'редуктор цилиндрический одноступенчатый';
         $reducer->transmission_type = 'Цилиндрический';
         $reducer->number_of_transmission_stages = 'Одноступенчатый';
@@ -117,6 +132,7 @@ class AddGearRatioPropertiesToReducersSeeder extends Seeder
         $reducer->total_center_distance = 100;
         $reducer->rated_output_torque = 810;
         $reducer->efficiency = 0.97;
+        $reducer->preview_image_url = $filePath;
         $reducer->save();
 
         $reducer->gear_ratios()->sync([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
