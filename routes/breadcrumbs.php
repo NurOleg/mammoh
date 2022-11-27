@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Models\Article;
 use App\Models\Reducer;
 use App\Models\Serie;
 use Diglactic\Breadcrumbs\Breadcrumbs;
@@ -44,4 +45,24 @@ Breadcrumbs::for('catalog.configurator', function (BreadcrumbTrail $trail, int $
     $trail->push($reducer->title, route('catalog.detail', ['slug' => $serie->slug, 'reducer_id' => $reducer->id]));
 
     $trail->push('Конфигуратор ' . $reducer->title);
+});
+
+Breadcrumbs::for('articles.index', function (BreadcrumbTrail $trail): void {
+    $trail->push('Главная', route('home'));
+
+    $trail->push('Статьи');
+});
+
+Breadcrumbs::for('articles.detail', function (BreadcrumbTrail $trail, string $slug): void {
+    $trail->push('Главная', route('home'));
+
+    $trail->push('Статьи', route('articles.index'));
+
+    /** @var Article $article */
+    $article = Article::query()
+        ->where('published', true)
+        ->where('slug', $slug)
+        ->firstOrFail();
+
+    $trail->push($article->title);
 });
