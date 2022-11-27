@@ -1,3 +1,6 @@
+@php
+    use Illuminate\Support\Facades\Route;
+@endphp
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -35,7 +38,11 @@
 <!-- <script src="js/main.min.js" defer></script> -->
 
 
-<header class="header header--index-page" x-on:click.outside="headerMobileMenu = false;headerFavorites = false">
+<header class="header
+        @if(Route::currentRouteName() === 'home')
+            header--index-page"
+        @endif
+        x-on:click.outside="headerMobileMenu = false;headerFavorites = false">
     <div class="container header__container">
         <button type="button" class="header__mobile-menu-btn"
                 x-on:click="headerFavorites = false;headerMobileMenu = !headerMobileMenu"

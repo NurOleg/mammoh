@@ -26,6 +26,7 @@ final class ArticlesController extends Controller
     public function show(string $slug): View
     {
         $article = Article::query()
+            ->with('reducer.serie')
             ->where('is_published', '=', true)
             ->where('slug', '=', $slug)
             ->firstOrFail();

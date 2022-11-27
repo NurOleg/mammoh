@@ -60,7 +60,7 @@ Breadcrumbs::for('articles.detail', function (BreadcrumbTrail $trail, string $sl
 
     /** @var Article $article */
     $article = Article::query()
-        ->where('published', true)
+        ->where('is_published', true)
         ->where('slug', $slug)
         ->firstOrFail();
 

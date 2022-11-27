@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Storage;
         <section class="articles-page" x-data="{toggleTagsList: false}">
             <div class="container articles-page__container">
                 <div class="articles-page__title-row">
-                    <a href="#" class="previous-link articles-page__previous-link">
-                        <svg class="previous-link__icon" width="24" height="12">
-                            <use href="../resources/svgSprites/svgSprite.svg#icon-back"></use>
-                        </svg>
-                    </a>
+                    @if(url()->current() != url()->previous())
+                        <a href="{{ url()->previous() }}" class="previous-link articles-page__previous-link">
+                            <svg class="previous-link__icon" width="24" height="12">
+                                <use href="{{ asset('svg/svgSprites/svgSprite.svg#icon-back') }}"></use>
+                            </svg>
+                        </a>
+                    @endif
                     <h1 class="section-title articles-page__section-title">Статьи</h1>
 {{--                    <form class="articles-page__search" action="#">--}}
 {{--                        <button type="submit" aria-label="button" class="articles-page__search-btn">--}}
