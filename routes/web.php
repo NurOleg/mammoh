@@ -20,3 +20,11 @@ Route::controller(ArticlesController::class)->group(function () {
     Route::get('/articles', 'index')->name('articles.index');
     Route::get('/articles/{slug}', 'show')->name('articles.detail');
 });
+
+Route::get('contacts', function () {
+   return view('static.contacts');
+})->name('contacts');
+
+Route::get('about', function () {
+    return view('static.about');
+})->name('about');

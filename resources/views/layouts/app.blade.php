@@ -59,10 +59,10 @@
         </a>
         <div class="header__right">
             <ul class="header__menu" role="list">
-                <li><a href="#">Каталог</a></li>
-                <li><a href="#">Статьи</a></li>
-                <li><a href="#">О нас</a></li>
-                <li><a href="#">Контакты</a></li>
+                <li><a href="{{ route('catalog') }}">Каталог</a></li>
+                <li><a href="{{ route('articles.index') }}">Статьи</a></li>
+                <li><a href="{{ route('about') }}">О нас</a></li>
+                <li><a href="{{ route('contacts') }}">Контакты</a></li>
             </ul>
             <button class="header__favorites-btn" type="button"
                     x-on:click="headerMobileMenu = false;headerFavorites = !headerFavorites"
