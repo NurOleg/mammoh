@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\ArticlesController;
+use App\Http\Controllers\FormController;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\HomeController;
@@ -19,6 +20,13 @@ Route::controller(CatalogController::class)->group(function () {
 Route::controller(ArticlesController::class)->group(function () {
     Route::get('/articles', 'index')->name('articles.index');
     Route::get('/articles/{slug}', 'show')->name('articles.detail');
+});
+
+Route::controller(FormController::class)->group(function () {
+    Route::get('/favorites', 'getFavoriteItems')->name('favorites.index');
+    Route::post('/favorites', 'setFavoriteItem')->name('favorites.create');
+    Route::post('/favorites/send', 'sendFavoriteForm')->name('favorites.send');
+    Route::post('/favorites/remove', 'removeFavoriteItem')->name('favorites.remove');
 });
 
 Route::get('contacts', function () {

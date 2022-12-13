@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     <!-- <link rel="manifest" href="/my.webmanifest"> -->
     <meta name="theme-color" content="#fff"/>
-
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="stylesheet" href="{{ asset('styles/main.css?v=1') }}"/>
     <!-- <link rel="stylesheet" href="styles/main.min.css" /> -->
 </head>
@@ -34,7 +34,9 @@
 <script defer src="//unpkg.com/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
 <script defer src="//unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <!-- <script src="js/modules/alpine.js" defer></script> -->
+<script src="//code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script src="{{ asset('js/main.js?v=1') }}" defer></script>
+<script src="{{ asset('js/custom.js?v=1') }}"></script>
 <!-- <script src="js/main.min.js" defer></script> -->
 
 
@@ -59,7 +61,7 @@
         </a>
         <div class="header__right">
             <ul class="header__menu" role="list">
-                <li><a href="{{ route('catalog') }}">Каталог</a></li>
+{{--                <li><a href="{{ route('catalog') }}">Каталог</a></li>--}}
                 <li><a href="{{ route('articles.index') }}">Статьи</a></li>
                 <li><a href="{{ route('about') }}">О нас</a></li>
                 <li><a href="{{ route('contacts') }}">Контакты</a></li>
@@ -77,7 +79,9 @@
                     <use class="header__favorites-star-icon-pressed"
                          href="{{ asset('svg/svgSprites/svgSprite.svg#star-icon-pressed') }}"></use>
                 </svg>
-                <span class="header__favorites-btn-count">10</span>
+                <span class="header__favorites-btn-count">
+                    {{ count(session()->get('favorite_items') ?? []) }}
+                </span>
             </button>
             <button class="header__auth-btn" type="button">
                 <svg class="header__auth-icon" width="22" height="20">
@@ -135,7 +139,7 @@
             </ul>
         </div>
     </nav>
-    <nav x-data="{ items: ['ZDY-80','ZDY-81','ZDY-82','ZDY-83'] }" class="header__favorites-menu"
+    <nav class="header__favorites-menu"
          x-show="headerFavorites === true" x-collapse.duration.800ms>
         <div class="header__favorites-menu-top">
             <h3>Избранные проекты</h3>
@@ -145,38 +149,9 @@
                 </svg>
             </button>
         </div>
-        <template x-if="items.length === 0">
-            <p class="header__favorites-menu-text">Вы ещё не выбрали проекты</p>
-        </template>
-        <template x-if="items.length >= 1">
-            <ul role="list" class="header__favorites-menu-list">
-                <template x-for="(item) in items" :key="item">
-                    <li class="header__favorites-menu-item">
-                        <div class="header__favorites-menu-item-info">
-                            <picture class="header__favorites-menu-item-picture">
-                                <img src="resources/images/header-favorites-menu-img.png" loading="lazy"
-                                     decoding="async" alt="image" class="header__favorites-menu-item-img" width="52"
-                                     height="52">
-                            </picture>
-                            <h4 class="header__favorites-menu-item-title" x-text="item">ZDY-80</h4>
-                        </div>
-                        <button type="button" class="btn  header__favorites-menu-item-clear-btn"
-                                x-on:click="items = items.filter(i => i !== item)">
-                            <svg class="header__favorites-menu-item-clear-icon" width="16" height="18">
-                                <use
-                                    href="{{ asset('svg/svgSprites/svgSprite.svg#header-favorites-menu-clear-icon') }}"></use>
-                            </svg>
-                        </button>
-                    </li>
-                </template>
-            </ul>
-        </template>
-        <template x-if="items.length >= 1">
-            <button type="button" class="btn btn--primary header__favorites-menu-modal-btn"
-                    x-on:click="headerFavoritesModal = true">
-                Запросить всё
-            </button>
-        </template>
+        <div id="header__favorites-menu__list">
+            @include('partials.favorites', ['items' => session()->get('favorite_items') ?? []])
+        </div>
     </nav>
 </header>
 
@@ -188,8 +163,7 @@
     @yield('content')
 </main>
 
-<div class="modal header-favorites-modal" x-bind:class="{ 'active': headerFavoritesModal === true }"
-     x-data="{items: ['ZDY-80','ZDY-81','ZDY-82','ZDY-83']}" x-on:click.self="headerFavoritesModal = false">
+<div class="modal header-favorites-modal" x-bind:class="{ 'active': headerFavoritesModal === true }" x-on:click.self="headerFavoritesModal = false">
     <div class="modal-content header-favorites-modal__content">
         <div class="header-favorites-modal__top">
             <div class="modal__title-wrapper header-favorites-modal__title-wrapper">
@@ -201,36 +175,13 @@
                     </svg>
                 </button>
             </div>
-            <template x-if="items.length === 0">
-                <p class="header-favorites-modal__clear-text">Вы ещё не выбрали проекты</p>
-            </template>
-            <template x-if="items.length >= 1">
-                <ul role="list" class="header-favorites-modal__list">
-                    <template x-for="item in items" :key="item">
-                        <li class="header-favorites-modal__list-item">
-                            <div class="header-favorites-modal__list-item-info">
-                                <picture class="header-favorites-modal__list-item-picture">
-                                    <img src="resources/images/header-favorites-menu-img.png" loading="lazy"
-                                         decoding="async" alt="image" class="header-favorites-modal__list-item-img"
-                                         width="52" height="52">
-                                </picture>
-                                <h4 class="header-favorites-modal__list-item-title" x-text="item">ZDY-80</h4>
-                            </div>
-                            <button type="button" aria-label="button" class="btn header-favorites-modal__clear-btn"
-                                    x-on:click="items = items.filter(i => i !== item)">
-                                <svg class="header__favorites-menu-item-clear-icon" width="16" height="18">
-                                    <use
-                                        href="{{ asset('svg/svgSprites/svgSprite.svg#header-favorites-menu-clear-icon') }}"></use>
-                                </svg>
-                            </button>
-                        </li>
-                    </template>
-                </ul>
-            </template>
+            <div id="header__favorites-menu-modal__list">
+                @include('partials.favorites_list', ['items' => session()->get('favorite_items') ?? []])
+            </div>
         </div>
         <div class="header-favorites-modal__bottom">
             <form action="#" method="post" class="modal__form header-favorites-modal__form"
-                  @submit.prevent="headerFavoritesModal = false; orderCompleteModal = true">
+                  @submit.prevent="headerFavoritesModal = false; orderCompleteModal = true; sendFavoriteForm;">
                 <fieldset class="header-favorites-modal__fieldset">
                     <div class="form-controls-wrapper header-favorites-modal__form-controls-wrapper">
                         <label for="headerFavoritesModalName">ФИО <sup>*</sup></label>
@@ -282,7 +233,7 @@
             </button>
         </div>
         <p class="order-complete-modal__text">Менеджер свяжется с вами в ближайшее время.</p>
-        <a href="#" class="btn btn--primary order-complete-modal__link">На страницу товара</a>
+        <a href="{{ route('home') }}" class="btn btn--primary order-complete-modal__link">На главную</a>
     </div>
 </div>
 <button type="button" aria-label="button" class="to-top-btn" x-on:click="window.scrollTo(0,0)">

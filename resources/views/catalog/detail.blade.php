@@ -68,7 +68,7 @@
                                     <template x-for="i in 3">
                                         <li class="swiper-slide product-page-aside__main-img-slide">
                                             <picture class="product-page-aside__main-img-slider-picture">
-                                                <img src="/resources/images/product-page-slider-main-img.png" loading="lazy" decoding="async" alt="image" class="product-page-aside__main-slider-img" width="343" height="240">
+                                                <img src="{{ Storage::url($reducer->preview_image_url) }}" loading="lazy" decoding="async" alt="image" class="product-page-aside__main-slider-img" width="343" height="240">
                                             </picture>
                                         </li>
                                     </template>
@@ -80,7 +80,7 @@
                                     <template x-for="i in 3">
                                         <li class="swiper-slide product-page-aside__thumbnails-img-slide">
                                             <picture class="product-page-aside__thumbnails-img-slider-picture">
-                                                <img src="/resources/images/product-page-slider-main-img.png" loading="lazy" decoding="async" alt="image" class="product-page-aside__thumbnails-slider-img" width="98" height="102">
+                                                <img src="{{ Storage::url($reducer->preview_image_url) }}" loading="lazy" decoding="async" alt="image" class="product-page-aside__thumbnails-slider-img" width="98" height="102">
                                             </picture>
                                         </li>
                                     </template>
@@ -91,6 +91,8 @@
                 </aside>
             </div>
             <div class="product-page-grid__right">
+                <input type="hidden" id="reducer_id" value="{{$reducer->id}}">
+                <input type="hidden" id="serie" value="{{str_replace('-serie', '', $reducer->serie->slug)}}">
                 <section class="product-page" x-data="{productPageTab: 'info'}">
                     <div class="container product-page__container">
                         <h1 class="section-title product-page__section-title">{{ $reducer->title }}</h1>
