@@ -27,6 +27,7 @@ Route::controller(FormController::class)->group(function () {
     Route::post('/favorites', 'setFavoriteItem')->name('favorites.create');
     Route::post('/favorites/send', 'sendFavoriteForm')->name('favorites.send');
     Route::post('/favorites/remove', 'removeFavoriteItem')->name('favorites.remove');
+    Route::post('/configurator/zdy', 'sendZdyConfigurator')->name('form.configurator.zdy');
 });
 
 Route::get('contacts', function () {

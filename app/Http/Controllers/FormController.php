@@ -7,10 +7,10 @@ namespace App\Http\Controllers;
 use App\DTO\FavoriteItemsDto;
 use App\Http\Requests\RemoveFavoriteItemRequest;
 use App\Http\Requests\SendFavoriteFormRequest;
+use App\Http\Requests\SendZdyConfiguratorFormRequest;
 use App\Http\Requests\SetFavoriteItemRequest;
 use App\Mail\SendFavoriteFormMail;
-use App\Models\Article;
-use App\Models\Tag;
+use App\Mail\SendZdyConfiguratorFormMail;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Mail;
@@ -92,6 +92,28 @@ final class FormController extends Controller
             );
 
         session()->forget('favorite_items');
+
+        return new JsonResponse('', 204);
+    }
+
+    public function sendZdyConfigurator(SendZdyConfiguratorFormRequest $request): JsonResponse
+    {
+        $phone = $request->get('phone');
+        $email = $request->get('email');
+        $comment = $request->get('comment');
+        $title = $request->get('title');
+        $fio = $request->get('fio');
+
+        Mail::to(config('mail.from.address'))
+            ->send(
+                new SendZdyConfiguratorFormMail(
+                    $title,
+                    $fio,
+                    $phone,
+                    $email,
+                    $comment
+                )
+            );
 
         return new JsonResponse('', 204);
     }

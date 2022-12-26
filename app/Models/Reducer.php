@@ -83,4 +83,11 @@ final class Reducer extends Model
             'default_output_shaft_id'
         );
     }
+
+    public function getNameForConfiguratorAttribute(): string
+    {
+        $nameArray = explode('-', $this->title);
+
+        return '1Ц2У-' . $nameArray[1];
+    }
 }
